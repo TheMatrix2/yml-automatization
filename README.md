@@ -1,0 +1,1 @@
+# Modules for automatization of YML feeds generation
