@@ -4,7 +4,7 @@ import json
 import xml.etree.ElementTree as et
 from typing import Generator
 
-from lib.get import get_shop_info, get_categories_from_xml
+from lib.helpers.get import get_shop_info, get_categories_from_xml
 
 
 def get_xml_url_from_csv(path_to_csv: str) -> Generator[et.Element, None, None]:
