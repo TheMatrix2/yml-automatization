@@ -1,8 +1,9 @@
-import csv
 import os
 import xml.etree.ElementTree as et
 from datetime import datetime
 from xml.dom import minidom
+
+from lib.helpers.get import get_reader_and_header
 
 SHOP_FIELDS = ['name', 'company', 'url', 'email', 'picture']
 DOCTOR_FIELDS = ['internal_id', 'description', 'first_name', 'surname', 'patronymic', 'experience_years',
@@ -24,17 +25,8 @@ class YmlGenerator:
         self.services = et.SubElement(self.shop, 'services')
         self.offers = et.SubElement(self.shop, 'offers')
 
-    @staticmethod
-    def _get_reader_and_header(source_path: str):
-        csv_file = open(source_path)
-        reader = csv.reader(csv_file)
-        next(reader)
-        header = next(reader)
-        csv_reader = csv.DictReader(csv_file, delimiter=',', fieldnames=header)
-        return csv_reader, header
-
     def _generate_shop_element(self):
-        csv_reader, header = YmlGenerator._get_reader_and_header(self.source_csv)
+        csv_reader, header = get_reader_and_header(self.source_csv)
         for idx, row in enumerate(csv_reader, start=2):
             self.shop.set('version', '2.0')
             self.shop.set('date', datetime.now().strftime('%Y-%m-%d %H:%M'))
@@ -50,7 +42,7 @@ class YmlGenerator:
             return None
 
     def _generate_offers(self):
-        csv_reader, header = YmlGenerator._get_reader_and_header(self.source_csv)
+        csv_reader, header = get_reader_and_header(self.source_csv)
         for idx, row in enumerate(csv_reader, start=2):
             if row['offer.url'] == '':
                 continue

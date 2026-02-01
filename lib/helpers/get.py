@@ -1,3 +1,4 @@
+import csv
 import xml.etree.ElementTree as et
 
 
@@ -15,3 +16,11 @@ def get_shop_info(xml_data: et.Element) -> dict[str, str]:
     clinic['company'] = xml_data.find('./shop/company').text
     clinic['url'] = xml_data.find('./shop/url').text
     return clinic
+
+def get_reader_and_header(source_path: str):
+    csv_file = open(source_path)
+    reader = csv.reader(csv_file)
+    next(reader)
+    header = next(reader)
+    csv_reader = csv.DictReader(csv_file, delimiter=',', fieldnames=header)
+    return csv_reader, header
